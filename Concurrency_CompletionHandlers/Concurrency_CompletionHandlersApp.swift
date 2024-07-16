@@ -11,7 +11,7 @@ import SwiftUI
 struct Concurrency_CompletionHandlersApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+          UsersListView()
         }
     }
 }

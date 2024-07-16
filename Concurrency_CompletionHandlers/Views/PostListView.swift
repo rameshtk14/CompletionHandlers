@@ -1,6 +1,6 @@
 //
 //  PostListView.swift
-//  iOSConcurrency1
+//  Concurrency_CompletionHandlers
 //
 //  Created by RAMESH on 16/07/24.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PostListView: View {
-    @StateObject var vm =  PostListViewModel(forPreview: true)
+    @StateObject var vm =  PostListViewModel(forPreview: false)
     var userId: Int?
     
     var body: some View {
@@ -24,6 +24,17 @@ struct PostListView: View {
                     }
                 }
             }
+            .overlay(content: {
+                if vm.isLoading {
+                    ProgressView()
+                }
+            })
+            .alert("Concurrency App Error", isPresented: $vm.showAlert, actions: {
+                Button("OK") {} },message: {
+                if let errorMessage = vm.errorMessage {
+                    Text(errorMessage)
+                }
+            })
             .navigationTitle("Posts")
             .navigationBarTitleDisplayMode(.inline)
             .listStyle(.plain)

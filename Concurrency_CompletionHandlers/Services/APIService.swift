@@ -1,18 +1,33 @@
 //
 //  APIService.swift
-//  iOSConcurrency1
+//  Concurrency_CompletionHandlers
 //
 //  Created by RAMESH on 16/07/24.
 //
 
 import Foundation
 
-enum APIError: Error {
+enum APIError: Error,LocalizedError {
     case invalidURL
     case invalidResponseStatus
-    case dataTaskError
+    case dataTaskError(String)
     case corruptData
-    case decodingError
+    case decodingError(String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return NSLocalizedString("URLEnd Point is invalid", comment: "")
+        case .invalidResponseStatus:
+            return NSLocalizedString("API returned invalid Status code", comment: "")
+        case .dataTaskError(let errorString):
+            return errorString
+        case .corruptData:
+            return NSLocalizedString("Data corrupted", comment: "")
+        case .decodingError(let errorString):
+            return errorString
+        }
+    }
 }
 struct APIService {
     let urlString: String
@@ -31,7 +46,7 @@ struct APIService {
                 return
             }
             guard error == nil else {
-                completion(.failure(.dataTaskError))
+                completion(.failure(.dataTaskError(error!.localizedDescription)))
                 return
             }
             guard let data = data else { completion(.failure(.corruptData))
@@ -46,7 +61,7 @@ struct APIService {
                 completion(.success(decodedData))
             }
             catch {
-                completion(.failure(.decodingError))
+                completion(.failure(.decodingError(error.localizedDescription)))
                 print("Error")
                 return
             }

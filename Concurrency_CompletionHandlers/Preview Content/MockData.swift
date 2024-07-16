@@ -1,6 +1,6 @@
 //
 //  MockData.swift
-//  iOSConcurrency1
+//  Concurrency_CompletionHandlers
 //
 //  Created by RAMESH on 16/07/24.
 //
@@ -8,7 +8,6 @@
 import Foundation
 
 extension User {
-    
     static var mockUsers:[User] {
         Bundle.main.decode(_type: [User].self, from: "users.json")
     }
@@ -18,7 +17,6 @@ extension User {
 }
 
 extension Post {
-    
     static var mockPosts:[Post] {
         Bundle.main.decode(_type: [Post].self, from: "posts.json")
     }

@@ -1,6 +1,6 @@
 //
 //  UsersListView.swift
-//  iOSConcurrency1
+//  Concurrency_CompletionHandlers
 //
 //  Created by RAMESH on 16/07/24.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 
 struct UsersListView: View {
     #warning("Remove forPreview argument or set ti to false for prod ")
-    @StateObject var vm =  UsersListViewModel(forPreview: true)
+    @StateObject var vm =  UsersListViewModel(forPreview: false)
     
     var body: some View {
         NavigationStack {
@@ -28,10 +28,23 @@ struct UsersListView: View {
                    
                 }
             }
+            .overlay(content: {
+                if vm.isLoading {
+                    ProgressView()
+                }
+            })
+            .alert("Concurrency App Error", isPresented: $vm.showAlert, actions: {
+                Button("OK") {} },message: {
+                if let errorMessage = vm.errorMessage {
+                    Text(errorMessage)
+                }
+            })
             .navigationTitle("Users")
             .navigationBarTitleDisplayMode(.inline)
             .listStyle(.plain)
         }
+        
+       
         .onAppear() {
             vm.fetchUsers()
         }
