@@ -45,8 +45,8 @@ struct UsersListView: View {
         }
         
        
-        .onAppear() {
-            vm.fetchUsers()
+        .task {
+            await vm.fetchUsers()
         }
     }
 }
